@@ -87,33 +87,33 @@ public class MapVisual : MonoBehaviour
                         case 8: AddVert(1, 2, true); AddVert(0, 1, true); AddVert(0, 2);  break;
 
                         case 3:
-                            AddVert(0, 0); AddVert(0, 1); AddVert(2, 0);
-                            AddVert(0, 1); AddVert(2, 1); AddVert(2, 0);
+                            AddVert(0, 1, true); AddVert(2, 1, true); AddVert(2, 0);
+                            AddVert(0, 0); AddVert(0, 1); AddVert(2, 0);                            
                             break;
                         case 6:
-                            AddVert(2, 0); AddVert(1, 0); AddVert(2, 2);
-                            AddVert(1, 0); AddVert(1, 2); AddVert(2, 2);
+                            AddVert(1, 0, true); AddVert(1, 2, true); AddVert(2, 2);
+                            AddVert(2, 0); AddVert(1, 0); AddVert(2, 2);                            
                             break;
                         case 12:
-                            AddVert(0, 1); AddVert(0, 2); AddVert(2, 1);
-                            AddVert(0, 2); AddVert(2, 2); AddVert(2, 1);
+                            AddVert(2, 1, true); AddVert(0, 1, true); AddVert(0, 2);
+                            AddVert(0, 2); AddVert(2, 2); AddVert(2, 1);                            
                             break;
                         case 9:
-                            AddVert(1, 0); AddVert(0, 0); AddVert(1, 2);
-                            AddVert(0, 0); AddVert(0, 2); AddVert(1, 2);
+                            AddVert(1, 2, true); AddVert(1, 0, true); AddVert(0, 0);
+                            AddVert(0, 0); AddVert(0, 2); AddVert(1, 2);                            
                             break;
 
                         case 5:
+                            AddVert(0, 1, true); AddVert(1, 2, true); AddVert(1, 0);
+                            AddVert(2, 1, true); AddVert(1, 0, true); AddVert(1, 2);
                             AddVert(0, 0); AddVert(0, 1); AddVert(1, 0);
                             AddVert(1, 2); AddVert(2, 2); AddVert(2, 1);
-                            AddVert(1, 0); AddVert(0, 1); AddVert(1, 2);
-                            AddVert(1, 2); AddVert(2, 1); AddVert(1, 0);
                             break;
                         case 10:
+                            AddVert(1, 0, true); AddVert(0, 1, true); AddVert(1, 2);
+                            AddVert(1, 2, true); AddVert(2, 1, true); AddVert(1, 0);
                             AddVert(1, 0); AddVert(2, 1); AddVert(2, 0);
-                            AddVert(0, 1); AddVert(0, 2); AddVert(1, 2);
-                            AddVert(1, 0); AddVert(0, 1); AddVert(1, 2);
-                            AddVert(1, 2); AddVert(2, 1); AddVert(1, 0);
+                            AddVert(0, 1); AddVert(0, 2); AddVert(1, 2);                            
                             break;
 
                         case 14:
