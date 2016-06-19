@@ -117,23 +117,23 @@ public class MapVisual : MonoBehaviour
                             break;
 
                         case 14:
-                            AddVert(1, 0); AddVert(0, 1); AddVert(2, 2);
+                            AddVert(1, 0, true); AddVert(0, 1, true); AddVert(2, 2);
                             AddVert(0, 1); AddVert(0, 2); AddVert(2, 2);
                             AddVert(1, 0); AddVert(2, 2); AddVert(2, 0);
                             break;
                         case 13:
-                            AddVert(0, 0); AddVert(0, 2); AddVert(1, 0);
-                            AddVert(1, 0); AddVert(0, 2); AddVert(2, 1);
+                            AddVert(2, 1, true); AddVert(1, 0, true); AddVert(0, 2);
+                            AddVert(0, 0); AddVert(0, 2); AddVert(1, 0);                            
                             AddVert(2, 1); AddVert(0, 2); AddVert(2, 2);
                             break;
                         case 11:
-                            AddVert(0, 0); AddVert(2, 1); AddVert(2, 0);
-                            AddVert(0, 0); AddVert(1, 2); AddVert(2, 1);
+                            AddVert(1, 2, true); AddVert(2, 1, true); AddVert(0, 0);
+                            AddVert(0, 0); AddVert(2, 1); AddVert(2, 0);                            
                             AddVert(0, 0); AddVert(0, 2); AddVert(1, 2);
                             break;
                         case 7:
-                            AddVert(0, 0); AddVert(0, 1); AddVert(2, 0);
-                            AddVert(0, 1); AddVert(1, 2); AddVert(2, 0);
+                            AddVert(0, 1, true); AddVert(1, 2, true); AddVert(2, 0);
+                            AddVert(0, 0); AddVert(0, 1); AddVert(2, 0);                            
                             AddVert(1, 2); AddVert(2, 2); AddVert(2, 0);
                             break;
 

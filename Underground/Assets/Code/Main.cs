@@ -42,7 +42,7 @@ public class Main : MonoBehaviour
 
         map = new Map(ca, 3);
         GameObject mapVisual = GameObject.Find("Map");
-        mapVisual.GetComponent<MapVisual>().Build(map, 1, 1);
+        mapVisual.GetComponent<MapVisual>().Build(map, 1, 2);
 	}
 	
 	
@@ -56,16 +56,16 @@ public class Main : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        if (map != null)
-        {
-            for (int i = 0; i < map.H; i++)
-            {
-                for (int j = 0; j < map.W; j++)
-                {
-                    Gizmos.color = map.T[i, j] == 1 ? Color.white : Color.blue;
-                    Gizmos.DrawCube(new Vector3(j, 0, i), Vector3.one * 0.2f);
-                }
-            }
-        }
+        //if (map != null)
+        //{
+        //    for (int i = 0; i < map.H; i++)
+        //    {
+        //        for (int j = 0; j < map.W; j++)
+        //        {
+        //            Gizmos.color = map.T[i, j] == 1 ? Color.white : Color.blue;
+        //            Gizmos.DrawCube(new Vector3(j, 0, i), Vector3.one * 0.2f);
+        //        }
+        //    }
+        //}
     }    
 }
