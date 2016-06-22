@@ -11,17 +11,18 @@ public class MapVisual : MonoBehaviour
     public void Build(Map map, float cellSz, float wallH)
     {
         CellSize = cellSz;
+        
+        MapBuilder mb = new MapBuilder(map, cellSz, wallH);
+        MapMesh mapMesh = mb.Build();
 
-        List<Vector3> v = new List<Vector3>();
-        List<int> t = new List<int>();
-        MapBuilder mb = new MapBuilder(map, cellSz, wallH,  v, t);
-        mb.Build();
+        Mesh floor = CreateMesh(mapMesh.Floor);
+        Mesh ceil = CreateMesh(mapMesh.Ceil);
+        Mesh walls = CreateMesh(mapMesh.Walls);
 
-        Mesh mesh = new Mesh();
-        mesh.vertices = v.ToArray();
-        mesh.triangles = t.ToArray();
-        mesh.RecalculateNormals();
-        GetComponent<MeshFilter>().sharedMesh = mesh;        
+        transform.Find("Floor").GetComponent<MeshFilter>().sharedMesh = floor;
+        transform.Find("Ceiling").GetComponent<MeshFilter>().sharedMesh = ceil;
+        transform.Find("Walls").GetComponent<MeshFilter>().sharedMesh = walls;
+
 
 
         //Mesh mesh = new Mesh();
@@ -41,31 +42,67 @@ public class MapVisual : MonoBehaviour
         //GetComponent<MeshFilter>().sharedMesh = mesh;
     }
 
+    Mesh CreateMesh(MeshData data)
+    {
+        Mesh mesh = new Mesh();
+        mesh.vertices = data.Verts.ToArray();
+        mesh.triangles = data.Tris.ToArray();
+        mesh.RecalculateNormals();
+
+        return mesh;
+    }
+
+    class MeshData
+    {
+        public List<Vector3> Verts = new List<Vector3>();
+        public List<int> Tris = new List<int>();
+    }
+
+    class MapMesh
+    {
+        public MeshData Floor = new MeshData();
+        public MeshData Ceil = new MeshData();
+        public MeshData Walls = new MeshData();
+    }
+
     class MapBuilder
     {
         Map map;
         float cellSz2, wallHeight;
-        List<Vector3> verts;
-        List<int> tris;
+
+        MapMesh mapMesh;
+        bool buildWalls;
+
+        MeshData mesh;
 
         int bi, bj;
-        List<Vector3> walls;
+        List<Vector3> wallSection;
 
         //Indices of already added vertices, which we'll reuse if avail        
         int[,] existCell;
         int[] existLine;        
 
-        public MapBuilder(Map map, float cellSz, float wallHeight, List<Vector3> v, List<int> t)
+        public MapBuilder(Map map, float cellSz, float wallHeight)
         {
             this.map = map;
             this.cellSz2 = cellSz * 0.5f;
             this.wallHeight = wallHeight;
-            this.verts = v;
-            this.tris = t;
+            this.mapMesh = new MapMesh();
         }
 
-        public void Build()
+        public MapMesh Build()
         {
+            Build(mapMesh.Floor, false, true);
+            Build(mapMesh.Ceil, true, false);
+
+            return mapMesh;
+        }
+
+        void Build(MeshData mesh, bool inverted, bool buildWalls)
+        {
+            this.buildWalls = buildWalls;
+            this.mesh = mesh;
+
             InitExist();
 
             for (bi = 0; bi < map.H - 1; bi++)
@@ -76,6 +113,8 @@ public class MapVisual : MonoBehaviour
 
                     int c = map.T[bi, bj] | (map.T[bi, bj + 1] << 1) |
                             (map.T[bi + 1, bj + 1] << 2) | (map.T[bi + 1, bj] << 3);
+
+                    if(inverted) c = (~c) & (0xF);
 
                     switch (c)
                     {
@@ -144,7 +183,8 @@ public class MapVisual : MonoBehaviour
                     }
 
                     Postproc();
-                    AddWallSection();
+
+                    if(this.buildWalls) AddWallSection();
                 }
 
                 PostprocRow();
@@ -169,7 +209,7 @@ public class MapVisual : MonoBehaviour
             if (existLine[2 * bj] != -1) existCell[0, 0] = existLine[2 * bj];
             for (int j = 1; j < 3; j++) existCell[0, j] = existLine[2 * bj + j];
 
-            walls = new List<Vector3>();
+            wallSection = new List<Vector3>();
         } 
         
         void Postproc()
@@ -202,18 +242,20 @@ public class MapVisual : MonoBehaviour
 
         void AddWallSection()
         {
-            for (int i = 0; i < walls.Count; i += 4)
-            {
-                int tid = verts.Count;
-                for (int j = 0; j < 4; j++)                
-                    verts.Add(walls[i + j]);
+            MeshData w = mapMesh.Walls;
 
-                tris.Add(tid);
-                tris.Add(tid + 1);
-                tris.Add(tid + 3);
-                tris.Add(tid);
-                tris.Add(tid + 3);
-                tris.Add(tid + 2);
+            for (int i = 0; i < wallSection.Count; i += 4)
+            {
+                int tid = w.Verts.Count;
+                for (int j = 0; j < 4; j++)                
+                    w.Verts.Add(wallSection[i + j]);
+
+                w.Tris.Add(tid);
+                w.Tris.Add(tid + 1);
+                w.Tris.Add(tid + 3);
+                w.Tris.Add(tid);
+                w.Tris.Add(tid + 3);
+                w.Tris.Add(tid + 2);
             }
         }
 
@@ -223,21 +265,21 @@ public class MapVisual : MonoBehaviour
             
             if (vi != -1)
             {
-                tris.Add(vi);
+                mesh.Tris.Add(vi);
             }
             else
             {
-                tris.Add(verts.Count);
-                vi = verts.Count;
-                verts.Add(new Vector3(2 * bj + x, 0, 2 * bi + y) * cellSz2);
+                mesh.Tris.Add(mesh.Verts.Count);
+                vi = mesh.Verts.Count;
+                mesh.Verts.Add(new Vector3(2 * bj + x, 0, 2 * bi + y) * cellSz2);
             }
 
             existCell[y, x] = vi;         
             
-            if(edge)
+            if(this.buildWalls && edge)
             {
-                walls.Add(new Vector3(2 * bj + x, 0, 2 * bi + y) * cellSz2);
-                walls.Add(new Vector3((2 * bj + x) * cellSz2, wallHeight, (2 * bi + y) * cellSz2));
+                wallSection.Add(new Vector3(2 * bj + x, 0, 2 * bi + y) * cellSz2);
+                wallSection.Add(new Vector3((2 * bj + x) * cellSz2, wallHeight, (2 * bi + y) * cellSz2));
             }
         }
     }   
