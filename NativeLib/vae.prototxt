@@ -1,0 +1,139 @@
+name: "VAE"
+
+input: "x"
+input_shape {
+  dim: 100
+  dim: 784  
+}
+
+input: "eps"
+input_shape {
+  dim: 100
+  dim: 2
+}
+
+layer {
+  name: "fc1"
+  type: "InnerProduct"
+  bottom: "x"
+  top: "h"
+  
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 32
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }   
+  }
+}
+
+layer {
+  name: "nl1"
+  type: "Sigmoid"
+  bottom: "h"
+  top: "h"
+}
+
+layer {
+  name: "fc_mu"
+  type: "InnerProduct"
+  bottom: "h"
+  top: "mu"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }   
+  }
+}
+
+layer {
+  name: "fc_sigma"
+  type: "InnerProduct"
+  bottom: "h"
+  top: "sigma"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }   
+  }
+}
+
+layer {
+  name: "dec_fc1"
+  type: "InnerProduct"
+  bottom: "mu"
+  top: "dec_h"
+  
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 32
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }   
+  }
+}
+
+layer {
+  name: "dec_nl1"
+  type: "Sigmoid"
+  bottom: "dec_h"
+  top: "dec_h"
+}
+
+layer {
+  name: "dec_fc2"
+  type: "InnerProduct"
+  bottom: "dec_h"
+  top: "y"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 784
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }   
+  }
+}
+
+layer {
+  name: "l2"
+  type: "SigmoidCrossEntropyLoss"
+  bottom: "y"
+  bottom: "x"
+  top: "l2"
+  loss_weight: 1
+}
+

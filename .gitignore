@@ -1,0 +1,13 @@
+*.exp
+GameBuild/
+**/packages/
+**/Debug/
+**/Release/
+**/TestExe/
+*.opensdf
+*.sdf
+*.db
+**/ipch/
+Underground/Assets/0000 a colormap terrainshader final
+Underground/Assets/0000 ats V2 package
+Underground/Assets/Standard Assets

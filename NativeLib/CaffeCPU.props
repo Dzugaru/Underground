@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CAFFE_DIR)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;CAFFE_VERSION=1.0.0-rc3;CPU_ONLY;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(CAFFE_DIR)\Build\Int\libcaffe\x64\Release;packages\hdf5-v120-complete.1.8.15.2\lib\native\lib\x64;$(CAFFE_DIR)\Build\x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libcaffe.lib;hdf5.lib;hdf5_tools.lib;hdf5_cpp.lib;hdf5_hl.lib;hdf5_hl_cpp.lib;sgd_solver.obj;hdf5_data_layer.obj;inner_product_layer.obj;relu_layer.obj;accuracy_layer.obj;softmax_loss_layer.obj;argmax_layer.obj;layer.obj;neuron_layer.obj;layer_factory.obj;euclidean_loss_layer.obj;input_layer.obj;sigmoid_cross_entropy_loss_layer.obj;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
